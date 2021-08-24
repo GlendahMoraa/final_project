@@ -2,4 +2,10 @@ streamlit
 pandas
 numpy
 scikit-learn
+<<<<<<< HEAD
 plotly
+=======
+matplotlib
+seaborn
+altair
+>>>>>>> 0d77918994643f77473d697a73c1ca5c6a3cecdb
