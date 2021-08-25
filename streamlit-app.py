@@ -7,12 +7,13 @@ import plotly.express as px
 from plotly import graph_objects as go
 import seaborn as sns 
 import altair as alt
+from streamlit.proto.Markdown_pb2 import Markdown
 
 
 merged = pd.read_csv('merged_df.csv')
 
 
-rad = st.sidebar.radio('Navigation', ['HOME', 'Visualization1', 'Visualization2', 'Visualization3'])
+rad = st.sidebar.radio('Navigation', ['HOME', 'Visualization1', 'Visualization2', 'Visualization3', 'Visualization4'])
 
 if rad == 'HOME':
     st.title('DISTRIBUTION OF PERSONS WITH ALBINISM IN 2018/2019')
@@ -38,11 +39,20 @@ if rad == 'Visualization2':
         st.plotly_chart(pop_chart)
 
 if rad == 'Visualization3':
-    cols= merged[['Sunsreen_Lotions', 'Lip_Care', 'AfterSun_Lotions', 'Caps', 'Long_Sleeved_Tshirts']].sum()
-    st.subheader('fgh')
-    st.markdown('sjnkbj')
-    df = merged[['Total_Male_PWA', 'Female_Pop']].sum()
-    gender = st.sidebar.multiselect('Select Column', df.columns)
-    st.title('Average prices of various commodities')
-    st.subheader('Products grouped into various categories')
-    st.bar_chart(df)
+    st.header('PWA by Gender')
+    st.markdown('Click the button bellow to view the pie chart')
+    if st.button('Pie Chart'):
+        df = merged[['Total_Male_PWA', 'Total_Female_PWA']].sum().to_frame().reset_index()
+        df.columns = ['Gender', 'Total Number']
+        gender_pie =  px.pie(df, values = 'Total Number', names = 'Gender')
+        st.plotly_chart(gender_pie)
+
+
+if rad == 'Visualization4':
+    st.header('Distribution of products per type')
+    st.markdown('Click the button bellow to view the bar chart')
+    if st.button('Barh Chart'):
+        df1 = merged[['Sunsreen_Lotions', 'Lip_Care', 'AfterSun_Lotions', 'Caps', 'Long_Sleeved_Tshirts']].sum().to_frame().reset_index()
+        df1.columns = ['Product', 'Number']
+        product_bar = px.bar(df1, x='Number', y= 'Product', orientation='h', color='Product')
+        st.plotly_chart(product_bar)
